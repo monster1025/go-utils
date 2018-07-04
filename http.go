@@ -32,7 +32,7 @@ func HttpGet(url string, client *http.Client) string {
 	req.Header.Set("User-Agent", randomUserAgent())
 	req.Header.Set("Accept-Language", "en-us")
 	// req.Header.Set("X-Requested-With", "XMLHttpRequest")
-	// req.Header.Set("Referer", "https://cart.tinydeal.com/index.php?__page_id=checkout&order_source=shopping_cart")
+	req.Header.Set("Referer", "https://www.papajohns.ru/")
 
 	resp, err := client.Do(req)
 	if err != nil {
@@ -43,6 +43,20 @@ func HttpGet(url string, client *http.Client) string {
 	defer resp.Body.Close()
 	contents, _ := ioutil.ReadAll(resp.Body)
 	return string(contents)
+}
+
+func HttpHead(url string, client *http.Client) int {
+	req, _ := http.NewRequest("HEAD", url, nil)
+	req.Header.Set("User-Agent", randomUserAgent())
+	req.Header.Set("Accept-Language", "en-us")
+
+	resp, err := client.Do(req)
+	if err != nil {
+		fmt.Printf("Cannot get url %s, err: %s", url, err.Error())
+		return 0
+	}
+
+	return resp.StatusCode
 }
 
 func HttpGetDump(url string, client *http.Client, file string) (string, string) {
